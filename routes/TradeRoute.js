@@ -1,8 +1,7 @@
 const express = require('express');
+const { UploadCSV } = require('../controllers/TradeController');
 const router = express.Router(); 
 
-router.post('/upload', (req, res) => {
-    res.status(200).json({ message: "Uploaded Successfully" })
-})
+router.post('/upload', UploadCSV)
 
 module.exports = router;
