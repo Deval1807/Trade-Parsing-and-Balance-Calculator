@@ -1,39 +1,30 @@
-const moment = require('moment');
-const Trade = require("../models/Trade");
+const fs = require('fs');
+const csv = require('csv-parser'); 
+const path = require('path');
+const InsertTrade = require("../services/TradeServices");
 
 const UploadCSV = async (req, res) => {
-    
-
-    /*
-    const { user_id, utc_time, operation, market, amount, price } = req.body;
-    try {
-        const coins = market.split('/')
-        const base_coin = coins[0];
-        const quote_coin = coins[1];
-
-        const utcTime = moment(utc_time, "DD-MM-YYYY hh:mm:ss A").toDate();
-        
-        const result = await Trade.create({
-            user_id: user_id,
-            utc_time: utcTime,
-            operation: operation,
-            base_coin: base_coin,
-            quote_coin: quote_coin,
-            amount: amount,
-            price: price
-        });
-
-        return res.status(200).json(result)
-
-    }catch(error) {
-        return res.status(400).json(error)
-    }
-    */
 
     const file = req.file
-    console.log(file.filename);
+    console.log(file);
 
-    
+    const filePath = path.join(file.destination, file.filename);
+    let csvData = []
+
+    fs.createReadStream(filePath)
+    .pipe(csv())
+    .on('data', (data) => {
+        csvData.push(data);
+    })
+    .on('end', async () => {
+        // push to DB
+        await InsertTrade(csvData);
+        res.status(200).json({ message: "inserted successfully" })
+    })
+    .on('error', (error) => {
+        res.status(400).json(error)
+    });
+
 }
 
 module.exports = { UploadCSV }
