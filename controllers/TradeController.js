@@ -2,6 +2,9 @@ const moment = require('moment');
 const Trade = require("../models/Trade");
 
 const UploadCSV = async (req, res) => {
+    
+
+    /*
     const { user_id, utc_time, operation, market, amount, price } = req.body;
     try {
         const coins = market.split('/')
@@ -25,6 +28,12 @@ const UploadCSV = async (req, res) => {
     }catch(error) {
         return res.status(400).json(error)
     }
+    */
+
+    const file = req.file
+    console.log(file.filename);
+
+    
 }
 
 module.exports = { UploadCSV }
