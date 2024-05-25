@@ -6,7 +6,6 @@ const InsertTrade = require("../services/TradeServices");
 const UploadCSV = async (req, res) => {
 
     const file = req.file
-    console.log(file);
 
     const filePath = path.join(file.destination, file.filename);
     let csvData = []
